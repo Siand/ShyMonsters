@@ -7,17 +7,17 @@ import java.util.Observer;
 import items.Board;
 import items.Card;
 import items.DefaultTile;
-import items.MoveCard;
 import items.Tile;
 import items.TileCard;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.Button;
+
+import misc.BoardSelector;
 import misc.CardHandler;
 import misc.MoveBuilder;
-import misc.BoardSelector;
 
 public class DisplayGrid extends VBox implements Observer
 {
@@ -25,13 +25,15 @@ public class DisplayGrid extends VBox implements Observer
 	
 	public DisplayGrid() {
 		grid = new Button[Board.HEIGHT][Board.WIDTH];
+		getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
 		for(int j = 0; j < Board.HEIGHT ; j++ ) {
 			HBox rowBox = new HBox();
 			for(int i = 0; i < Board.WIDTH ; i++ ) {
 				grid[j][i] = new Button();
+				grid[j][i].getStyleClass().add("gridButton");
 				final int x = i;
 				final int y = j;
-				grid[j][i].setOnAction(e ->{
+				grid[j][i].setOnAction(e -> {
 					ArrayList<Card> cards = CardHandler.Instance().get();
 					if( cards.size() == 0) return;
 					if(cards.get(0) instanceof TileCard)
@@ -66,11 +68,16 @@ public class DisplayGrid extends VBox implements Observer
 	
 	public void onUpdate() {
 		int size = (int)getMinHeight() / Board.HEIGHT;
-		size -=2;
+		size -=4;
 		for(int i = 0; i < Board.WIDTH ; i++ ) {
 			for(int j = 0; j < Board.HEIGHT ; j++ ) {
 				Tile tile = Board.Instance().get(i, j);
 				if(!tile.hasChanged) continue;
+				if(tile instanceof DefaultTile) {
+					removeBorder(i,j);
+				} else {
+					addBorder(i,j);
+				}
 				String artwork = tile.getArtwork();
 				Image image = new Image(DisplayGrid.class.getResourceAsStream(artwork), size, size, false, true);
 				grid[j][i].setGraphic(new ImageView(image));
@@ -96,6 +103,16 @@ public class DisplayGrid extends VBox implements Observer
 	public void update(Observable o, Object arg)
 	{
 		onUpdate();		
+	}
+	
+	private void removeBorder(int x, int y) {
+		grid[y][x].getStyleClass().removeAll("gridButtonToggled");
+		grid[y][x].getStyleClass().add("gridButtonUntoggled");
+	}
+	
+	private void addBorder(int x, int y) {
+		grid[y][x].getStyleClass().removeAll("gridButtonUntoggled");
+		grid[y][x].getStyleClass().add("gridButtonToggled");
 	}
 }
 

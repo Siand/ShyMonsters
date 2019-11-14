@@ -13,6 +13,7 @@ public class GameScreen implements Observer
 	int turns = 6;
 	boolean[] actives;
 	int currentTurn = 0;
+	int reveals = 2;
 	int role;
 	public GameScreen(int role) {
 		this.role = role;
@@ -34,7 +35,8 @@ public class GameScreen implements Observer
 		if(!actives[currentTurn]) {
 			MainMenu.mainStage.setScene(waiting.getScene());
 		} else {
-			MainMenu.mainStage.setScene(PlayScene.Instance().getScene(role));
+			MainMenu.mainStage.setScene(PlayScene.Instance().getScene(role, reveals));
+			reveals--;
 		}
 		currentTurn++;
 	}

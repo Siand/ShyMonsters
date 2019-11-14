@@ -22,12 +22,25 @@
 }
 
 .comboBox {
-    -fx-background: white;
+    -fx-background: black;
     -fx-background-color: transparent;
+    -fx-text-base-color: white;
     -fx-text-fill: -fx-text-base-color;
-    -fx-padding: 3 0 2 7;
-	-fx-border-radius:24px;
-	-fx-border-width:1px;
+	-fx-border-width:4px;
 	-fx-border-style: solid;
-	-fx-border-color: #96a398;
+	-fx-border-color: white;
+}
+
+.gridButton {
+	-fx-border-style: solid;
+	-fx-border-color: red;
+	-fx-border-width:0px;
+}
+
+.gridButtonToggled {
+	-fx-border-width:4px;
+}
+
+.gridButtonUntoggled {
+	-fx-border-width:0px;
 }

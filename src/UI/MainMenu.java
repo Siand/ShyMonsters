@@ -31,7 +31,7 @@ public class MainMenu extends Application
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		mainStage = primaryStage;
-		//mainStage.setResizable(false);
+		mainStage.setResizable(false);
 		mainStage.sizeToScene(); // Prevent extra area in the border area
 		//primaryStage.getIcons().add(new Image(DMClient.class.getResourceAsStream("logo.png")));
 		Screen screen = Screen.getPrimary();
@@ -82,7 +82,7 @@ public class MainMenu extends Application
 		CyanMonster bm = new CyanMonster();
 		bm.reveal();
 		//Board.Instance().add(0, 0, bm);
-		mainStage.setScene(PlayScene.Instance().getScene(Constants.DM));
+		mainStage.setScene(PlayScene.Instance().getScene(Constants.DM,2));
 		mainStage.setMaximized(true);
 		mainStage.show();
 	}
