@@ -1,0 +1,33 @@
+.mainMenuButton {
+	-fx-font-family: "Aclonica";
+	-fx-font-size: 45pt ;
+	-fx-background-color:black;
+	-fx-text-base-color: white;
+	-fx-border-width:4px; 
+	-fx-border-style: solid;
+	-fx-border-color: white;
+
+}
+.mainMenuButton:active,
+.mainMenuButton:hover {
+	-fx-background-color: white;
+	-fx-text-base-color: black;
+	-fx-border-color: black;
+}
+
+.title {
+	-fx-font: 60px "Aclonica";
+	-fx-text-base-color: white;
+	-fx-text-fill: white;
+}
+
+.comboBox {
+    -fx-background: white;
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-padding: 3 0 2 7;
+	-fx-border-radius:24px;
+	-fx-border-width:1px;
+	-fx-border-style: solid;
+	-fx-border-color: #96a398;
+}
