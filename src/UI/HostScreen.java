@@ -1,14 +1,11 @@
 package UI;
 
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.stage.Screen;
 import misc.Constants;
 import net.ClientFactory;
 import net.HostClient;
@@ -19,19 +16,20 @@ public class HostScreen
 	private Scene scene;
 	static int role = Constants.DM;
 	public HostScreen() {
-		Text text = new Text("Select your role:");
+		Label text = new Label("Select your role:");
+		text.getStyleClass().add("title");
 		ComboBox<String> roles = new ComboBox<String>();
 		roles.getItems().add("DM");
 		roles.getItems().add("Hero");
 		roles.getSelectionModel().select(0);
-		
 		roles.getSelectionModel().selectedItemProperty().addListener(
 				(options, oldValue, newValue) -> { 
 					role = newValue.equals("DM")? Constants.DM : Constants.HERO;
 				}
 		);
+		roles.getStyleClass().add("comboBox");
 		Button start = new Button("Start");
-		start.setDisable(true);
+		start.getStyleClass().add("mainMenuButton");
 		start.setOnAction(e -> {
 			if(HostClient.hasConnection) {
 				Game game = new Game(role);
@@ -42,10 +40,11 @@ public class HostScreen
 		items.getChildren().add(text);
 		items.getChildren().add(roles);
 		items.getChildren().add(start);
-		Screen screen = Screen.getPrimary();
-		Rectangle2D bounds = screen.getVisualBounds();
-		scene = new Scene(items, bounds.getWidth(), bounds.getHeight());
 		items.setBackground(MainMenu.bg);
+		items.setAlignment(Pos.CENTER);
+		scene = new Scene(items, MainMenu.frameWidth, MainMenu.frameHeight);
+		scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+		
 		ClientFactory.create();
 		start.setDisable(false);
 	}

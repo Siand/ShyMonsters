@@ -19,7 +19,7 @@ public class HostClient implements Client
 	public HostClient(int port) {
 		portNO = port;
 		cr = new ConnectionReciever();
-		(new Thread(cr)).run();
+		(new Thread(cr)).start();
 	}
 	@Override
 	public void send(String data)
