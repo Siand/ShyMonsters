@@ -9,37 +9,44 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
+import misc.Constants;
+import net.ClientFactory;
 import net.HostClient;
 
 
 public class HostScreen
 {
 	private Scene scene;
+	static int role = Constants.DM;
 	public HostScreen() {
 		Text text = new Text("Select your role:");
-		ComboBox<String> profiles = new ComboBox<String>();
-		profiles.getItems().add("DM");
-		profiles.getItems().add("Hero");
+		ComboBox<String> roles = new ComboBox<String>();
+		roles.getItems().add("DM");
+		roles.getItems().add("Hero");
+		roles.getSelectionModel().select(0);
+		
+		roles.getSelectionModel().selectedItemProperty().addListener(
+				(options, oldValue, newValue) -> { 
+					role = newValue.equals("DM")? Constants.DM : Constants.HERO;
+				}
+		);
 		Button start = new Button("Start");
 		start.setDisable(true);
 		start.setOnAction(e -> {
-			GameScene
+			if(HostClient.hasConnection) {
+				Game game = new Game(role);
+			}
 		});
 		VBox items = new VBox();
 		items.setSpacing(20);
 		items.getChildren().add(text);
-		items.getChildren().add(profiles);
+		items.getChildren().add(roles);
 		items.getChildren().add(start);
 		Screen screen = Screen.getPrimary();
 		Rectangle2D bounds = screen.getVisualBounds();
 		scene = new Scene(items, bounds.getWidth(), bounds.getHeight());
-		HostClient.createInstance(1237);
-		while(!HostClient.hasConnection) {
-			try {
-				Thread.sleep(50);
-			} catch (InterruptedException e1) {
-			}
-		}
+		items.setBackground(MainMenu.bg);
+		ClientFactory.create();
 		start.setDisable(false);
 	}
 	

@@ -14,19 +14,9 @@ public class HostClient implements Client
 	public static Socket connection = null;
 	public static Reciever reciever = null;
 	public static PrintWriter out = null;
-	private static HostClient instance = null;
 	ConnectionReciever cr;
 	
-	public static void createInstance(int port) { 
-		if(instance != null) { 
-			instance = new HostClient(port);
-		}
-	}
-	public static HostClient Instance() { 
-		return instance;
-	}
-	
-	private HostClient(int port) {
+	public HostClient(int port) {
 		portNO = port;
 		cr = new ConnectionReciever();
 		(new Thread(cr)).run();

@@ -15,6 +15,24 @@
 	-fx-border-color: black;
 }
 
+
+.UIButton {
+	-fx-font-family: "Aclonica";
+	-fx-font-size: 30pt ;
+	-fx-background-color:black;
+	-fx-text-base-color: white;
+	-fx-border-width:3px; 
+	-fx-border-style: solid;
+	-fx-border-color: white;
+
+}
+.UIButton:active,
+.UIButton:hover {
+	-fx-background-color: white;
+	-fx-text-base-color: black;
+	-fx-border-color: black;
+}
+
 .title {
 	-fx-font: 60px "Aclonica";
 	-fx-text-base-color: white;
@@ -43,4 +61,18 @@
 
 .gridButtonUntoggled {
 	-fx-border-width:0px;
+}
+.whiteText {
+	-fx-font-size: 25pt ;
+	-fx-text-base-color: white;
+	-fx-text-fill: -fx-text-base-color;
+}
+
+.textField {
+    -fx-background-color: black;
+   	-fx-text-base-color: white;
+	-fx-text-fill: white;
+	-fx-border-width:4px;
+	-fx-border-style: solid;
+	-fx-border-color: white;
 }

@@ -28,6 +28,7 @@ public class MainMenu extends Application
 		launch(args);
 	}
 	static double frameWidth = 468, frameHeight = 360;
+	static Background bg;
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		mainStage = primaryStage;
@@ -36,7 +37,7 @@ public class MainMenu extends Application
 		//primaryStage.getIcons().add(new Image(DMClient.class.getResourceAsStream("logo.png")));
 		Screen screen = Screen.getPrimary();
 		Rectangle2D bounds = screen.getVisualBounds();
-		Background blackBG = new Background(new BackgroundFill(Color.BLACK,new CornerRadii(0),new Insets(0)));
+		bg = new Background(new BackgroundFill(Color.BLACK,new CornerRadii(0),new Insets(0)));
 
 		mainStage.setX(bounds.getMinX());
 		mainStage.setY(bounds.getMinY());
@@ -45,44 +46,44 @@ public class MainMenu extends Application
 		mainStage.setWidth(frameWidth);
 		mainStage.setHeight(frameHeight);
 		
-	/*	// Items
+		// Items
 		Button host = new Button("HOST");
 		host.getStyleClass().add("mainMenuButton");
 		Button join = new Button("JOIN");
 		join.getStyleClass().add("mainMenuButton");
 		Label title  = new Label("Shy Monsters");
 		title.getStyleClass().add("title");
-		*/
+		
 		
 		VBox scenePanel = new VBox();
 		scenePanel.setAlignment(Pos.CENTER);
 		scenePanel.setSpacing(20);
-		scenePanel.setBackground(blackBG);
+		scenePanel.setBackground(bg);
 		Scene mainScene = new Scene(scenePanel, frameWidth, frameHeight);
 		mainScene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
 		
 		
-		/*//Add items to panel
+		//Add items to panel
 		scenePanel.getChildren().add(title);
 		scenePanel.getChildren().add(host);
 		scenePanel.getChildren().add(join);
 		
 		host.setOnAction(e -> {
-			
+			HostScreen hs = new HostScreen();
+			mainStage.setScene(hs.getScene());
 		});
 		
 		join.setOnAction(e -> {
-			
+			JoinScreen js = new JoinScreen(); 
+			mainStage.setScene(js.getScene());
 		});
-		*/
+		
 		
 		//DisplayGrid grid = new DisplayGrid();
 		//grid.resize((int)(frameHeight* 0.9));
 		//scenePanel.getChildren().add(grid);
-		CyanMonster bm = new CyanMonster();
-		bm.reveal();
-		//Board.Instance().add(0, 0, bm);
-		mainStage.setScene(PlayScene.Instance().getScene(Constants.DM,2));
+		//mainStage.setScene(PlayScene.Instance().getScene(Constants.DM,2));
+		mainStage.setScene(mainScene);
 		mainStage.setMaximized(true);
 		mainStage.show();
 	}

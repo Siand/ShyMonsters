@@ -1,13 +1,18 @@
 package items;
 
-import moves.Move;
-
 public class MoveCard implements Card
 {
-	private Move m;
+	private boolean isAttack;
+	private boolean isJump;
 	private boolean inUse = false;
 	protected int uses = 1;
 	protected String artwork = "";
+	
+	public MoveCard(boolean iA, boolean iJ) {
+		isAttack = iA;
+		isJump = iJ;
+	}
+	
 	@Override
 	public boolean isUnique()
 	{
@@ -33,14 +38,14 @@ public class MoveCard implements Card
 	@Override
 	public void deplete()
 	{
-		uses--;
-		artwork	= "cardback.png";	
+		if(isAttack() || isJump()) { uses--; }
+		if(uses == 0)  { artwork	= "cardback.png"; }
 	}
 	
 	public boolean isAttack() {
-		return m.isAttack;
+		return isAttack;
 	}
 	public boolean isJump() {
-		return m.isJump;
+		return isJump;
 	}
 }
