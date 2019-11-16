@@ -13,7 +13,8 @@ public class BlueMonster extends Monster
 	}
 	
 	public void init() {
-		frontArtwork = "BlueMonster.png"; 
+		frontArtwork = "BlueMonster.png";
+		name = "Blue";
 		pattern.addFilled(0,-1);
 		pattern.addFilled(-1, 0);
 		pattern.addFilled(1, 0);

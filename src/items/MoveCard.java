@@ -11,12 +11,17 @@ public class MoveCard implements Card
 	public MoveCard(boolean iA, boolean iJ) {
 		isAttack = iA;
 		isJump = iJ;
+		if(isJump) {
+			artwork = "jump.png";
+		} else if(isAttack) {
+			artwork = "attack.png";
+		}
 	}
 	
 	@Override
 	public boolean isUnique()
 	{
-		return (!isAttack() && !isJump());
+		return false;
 	}
 	
 	@Override
@@ -38,7 +43,7 @@ public class MoveCard implements Card
 	@Override
 	public void deplete()
 	{
-		if(isAttack() || isJump()) { uses--; }
+		uses--;
 		if(uses == 0)  { artwork	= "cardback.png"; }
 	}
 	
@@ -47,5 +52,11 @@ public class MoveCard implements Card
 	}
 	public boolean isJump() {
 		return isJump;
+	}
+
+	@Override
+	public String getArtwork()
+	{
+		return artwork;
 	}
 }

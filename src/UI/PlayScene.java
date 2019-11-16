@@ -1,6 +1,10 @@
 package UI;
 
+import java.util.ArrayList;
+
 import items.Board;
+import items.Card;
+import items.MoveCard;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,8 +19,12 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import misc.BoardSelector;
+import misc.CardHandler;
 import misc.CardPile;
 import misc.Constants;
+import misc.MoveBuilder;
+import net.ClientFactory;
 
 public class PlayScene
 {
@@ -36,10 +44,8 @@ public class PlayScene
 		StackPane root = new StackPane();
 		
 		// Grid
-		DisplayGrid grid = new DisplayGrid();
-		grid.resize(size);
-		root.getChildren().add(grid);
-		StackPane.setAlignment(grid, Pos.CENTER_LEFT);
+		DisplayGrid grid;
+
 		
 		Hand hand = new Hand();
 		Button lockIn = new Button("Lock In");
@@ -47,17 +53,38 @@ public class PlayScene
 		
 		// DM specifics
 		if(role == Constants.DM) {
+			grid = new DisplayGrid(0);
 			hand.supply(CardPile.Instance().drawHand());
 			lockIn.setOnAction(e -> {
-				
+				if(BoardSelector.Instance().isValid()) {
+					GameObserver.Instance().onChange();
+				}
 			});
 		}
 		// Hero specifics
 		else {
-			// hero cards
+			grid = new DisplayGrid(reveals);
+			ArrayList<Card> cards= new ArrayList<>();
+			cards.add(new MoveCard(true, false));
+			cards.add(new MoveCard(false, true));
+			hand.supply(cards);
+			lockIn.setOnAction(e -> {
+				MoveBuilder.Instance().reset();
+				for(Card c : CardHandler.Instance().get()) {
+					MoveBuilder.Instance().apply((MoveCard) c);
+				}
+				if(MoveBuilder.Instance().applyPositions(Board.Instance().getPawnPos(), BoardSelector.Instance().get())) {
+					CardHandler.Instance().depleteAll();
+					ClientFactory.getClient().send(MoveBuilder.Instance().get().toJSONString());
+				}
+				
+			});
 		}
+		// 
 		hand.resize( size / Board.HEIGHT);
-		
+		grid.resize(size);
+		root.getChildren().add(grid);
+		StackPane.setAlignment(grid, Pos.CENTER_LEFT);
 
 		root.getChildren().add(hand);
 		StackPane.setAlignment(hand, Pos.TOP_RIGHT);
@@ -65,7 +92,7 @@ public class PlayScene
 		Image im = new Image(PlayScene.class.getResourceAsStream("rules.jpg"), size / 4, size /4, false, true);
 		ImageView rulesView = new ImageView(im);
 		Label image = new Label("", rulesView);
-		Label tilesToReveal = new Label(reveals+" Reveals this turn.");
+		Label tilesToReveal = new Label((role == Constants.DM? 0 : reveals) +" Reveals this turn.");
 		tilesToReveal.getStyleClass().add("whiteText");
 		lockIn.setAlignment(Pos.CENTER_RIGHT);
 		tilesToReveal.setAlignment(Pos.CENTER_RIGHT);

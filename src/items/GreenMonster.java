@@ -14,6 +14,7 @@ public class GreenMonster extends Monster
 	
 	public void init() {
 		frontArtwork = "GreenMonster.png";
+		name = "Green";
 		pattern.addEmpty(0,-1);
 		pattern.addEmpty(0, 1);
 		pattern.addFilled(-1, 0);

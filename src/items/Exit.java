@@ -1,18 +1,21 @@
 package items;
 
+import UI.GameObserver;
 
 public class Exit extends Tile
 {
 
 	public Exit() {
 		frontArtwork = "exit.png";
+		name = "Exit";
 	}
+	
 	@Override
 	public void stepOn(HeroPawn h)
 	{
 		reveal();
 		h.setPos(x, y);
-		Board.Instance().gameOver();
+		GameObserver.Instance().onChange();
 	}
 
 	@Override

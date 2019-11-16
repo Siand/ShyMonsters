@@ -6,6 +6,7 @@ public class Entrance extends Tile
 	public Entrance() {
 		frontArtwork = "entrance.png";
 		reveal();
+		name = "Entrance";
 	}
 	@Override
 	public void stepOn(HeroPawn h)

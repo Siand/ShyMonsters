@@ -5,6 +5,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import items.Board;
+import items.Card;
 import items.TileCard;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -15,14 +16,14 @@ import misc.CardHandler;
 
 public class Hand extends VBox implements Observer
 {
-	private ArrayList<TileCard> cards;
+	private ArrayList<Card> cards;
 	private Button[] row;
 	int cardSize = 0;
 	public Hand() {
 		Board.Instance().addObserver(this);
 	}
 	
-	public void supply(ArrayList<TileCard> cards) {
+	public void supply(ArrayList<Card> cards) {
 		this.cards = cards;
 		getChildren().clear();
 		row = new Button[cards.size()];

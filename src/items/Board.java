@@ -3,6 +3,9 @@ package items;
 import java.util.ArrayList;
 import java.util.Observable;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import javafx.util.Pair;
 import moves.Move;
 import moves.Position;
@@ -28,6 +31,10 @@ public class Board extends Observable
 	
 	public Tile get(int x, int y) {
 		return board[y][x];
+	}
+	
+	public Position getPawnPos() {
+		return pawn.getPos();
 	}
 	
 	public boolean add(int x, int y, TileCard t) {
@@ -111,14 +118,28 @@ public class Board extends Observable
 		pawn = new HeroPawn(x,y);		
 	}
 
-	public void gameOver()
-	{
-		
-	}
 
 	public boolean isSteppable(int x, int y)
 	{
 		return board[y][x].isSteppable();
 	}
 	
+	public String toJSONString() {
+		JSONObject boardObj = new JSONObject();
+		JSONArray tileArr = new JSONArray();
+		
+		for(Tile[] row : board) {
+			for(Tile tile : row) {
+				if(tile instanceof DefaultTile) continue;
+				JSONObject arrelement = new JSONObject();
+				arrelement.put("Name", tile.getName());
+				arrelement.put("X", tile.x);
+				arrelement.put("Y", tile.y);
+				tileArr.add(arrelement);
+			}
+		}
+		
+		boardObj.put("Tiles", tileArr);
+		return boardObj.toJSONString();
+	}
 }

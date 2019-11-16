@@ -14,6 +14,7 @@ public class CyanMonster extends Monster
 	
 	public void init() {
 		frontArtwork = "CyanMonster.png";
+		name = "Cyan";
 		pattern.addEmpty(0,-1);
 		pattern.addEmpty(1, -1);
 		pattern.addFilled(1, 0);

@@ -13,6 +13,7 @@ public class OrangeMonster extends Monster
 	
 	public void init() {
 		frontArtwork = "OrangeMonster.png";
+		name = "Orange";
 		pattern.addEmpty(0,-1);
 		pattern.addFilled(-1, 0);
 		pattern.addEmpty(1, 0);

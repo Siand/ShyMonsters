@@ -1,5 +1,6 @@
 package items;
 
+import UI.GameObserver;
 
 public class Monster extends Tile
 {
@@ -30,8 +31,7 @@ public class Monster extends Tile
 		h.setPos(x, y);
 		reveal();
 		if(isAlive && pattern.isActive(Board.Instance().getSurroundings(x,y)) && !Board.Instance().isShy(x,y)) {
-			h.Die();
-			Board.Instance().gameOver();
+			GameObserver.Instance().gameOver(true);
 		}
 	}
 
@@ -44,6 +44,4 @@ public class Monster extends Tile
 	public void kill() {
 		isAlive = false;
 	}
-
-
 }

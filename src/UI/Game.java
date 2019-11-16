@@ -3,10 +3,12 @@ package UI;
 import java.util.Observable;
 import java.util.Observer;
 
+import items.Board;
 import javafx.scene.Scene;
 import misc.Constants;
+import net.ClientFactory;
 
-public class Game implements Observer
+public class Game
 {
 	Scene scene;
 	WaitingScreen waiting = WaitingScreen.Instance();
@@ -22,17 +24,19 @@ public class Game implements Observer
 		} else {
 			actives = new boolean[] {false, true, false, true, false, true};
 		}
-		
-		update(null, null);
+		GameObserver.Instance().subscribe(this);
+		update();
 	}
 	
-	@Override
-	public void update(Observable arg0, Object arg1)
+	public void update()
 	{
 		if(turns == currentTurn) {
-			gameOver(); 
+			gameOver(false); 
 		}
 		if(!actives[currentTurn]) {
+			if(role == Constants.DM) {
+				ClientFactory.getClient().send(Board.Instance().toJSONString());
+			}
 			MainMenu.mainStage.setScene(waiting.getScene());
 		} else {
 			MainMenu.mainStage.setScene(PlayScene.Instance().getScene(role, reveals));
@@ -41,11 +45,19 @@ public class Game implements Observer
 		currentTurn++;
 	}
 	
-	public void gameOver() {
+	public void gameOver(boolean killed) {
 		if(role == Constants.DM) {
-			// LOSE
+			if(killed) {
+				// WIN
+			} else {
+				// LOSE
+			}
 		} else {
-			// win
+			if(killed) {
+				// win
+			} else {
+				// lose
+			}
 		}
 	}
 }

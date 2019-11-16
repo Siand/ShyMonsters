@@ -7,4 +7,5 @@ public interface Card
 	public boolean getInUse();
 	public void deplete();
 	public boolean canUse();
+	public String getArtwork();
 }

@@ -5,13 +5,16 @@ public abstract class Tile
 {
 	public String backArtwork = "cardback.png";
 	public String frontArtwork = "";
+	protected String name = "";
 	protected int x;
 	protected int y;
 	protected boolean revealed;
 	public boolean hasChanged = true;
 	public abstract void stepOn(HeroPawn h);
 	public abstract void spawn(int x ,int y);
-	
+	public String getName() {
+		return name;
+	}
 	public boolean isSteppable() {
 		return true;
 	}

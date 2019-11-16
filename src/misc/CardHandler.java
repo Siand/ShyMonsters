@@ -34,7 +34,11 @@ public class CardHandler
 		}
 		selected.add(c);
 	}
-	
+	public void depleteAll() {
+		for(Card c : selected) {
+			c.deplete();
+		}
+	}
 	public void remove (Card c) {
 		if(c instanceof TileCard) {
 			((TileCard)c).remove();

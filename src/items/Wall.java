@@ -4,6 +4,7 @@ public class Wall extends Tile
 {
 	public Wall() {
 		frontArtwork = "wall.png";
+		name = "Wall";
 	}
 	
 	@Override

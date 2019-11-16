@@ -1,5 +1,7 @@
 package items;
 
+import moves.Position;
+
 public class HeroPawn
 {
 	private int x,y;
@@ -13,6 +15,9 @@ public class HeroPawn
 		this.y = y;
 	}
 	
+	public Position getPos() {
+		return new Position(x, y);
+	}
 	
 	public void move(Tile tile) {
 		tile.reveal();

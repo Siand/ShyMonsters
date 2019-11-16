@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import items.BlueMonster;
+import items.Card;
 import items.TileCard;
 import items.CyanMonster;
 import items.Entrance;
@@ -19,7 +20,7 @@ public class CardPile
 {
 	
 	private static CardPile instance = null;
-	private static ArrayList<TileCard> monsterPile;
+	private static ArrayList<Card> monsterPile;
 	
 	private CardPile() {
 		monsterPile = new ArrayList<>();
@@ -39,15 +40,15 @@ public class CardPile
 		return instance;
 	}
 	
-	public ArrayList<TileCard> drawHand() {
-		ArrayList<TileCard> hand =  new ArrayList<>();
+	public ArrayList<Card> drawHand() {
+		ArrayList<Card> hand =  new ArrayList<>();
 		for(int i = 0 ; i < 3; i++) {
 			hand.add(new TileCard(new Wall()));
 		}
 		hand.add(new TileCard(new Entrance()));
 		hand.add(new TileCard(new Exit()));
-		TileCard m1 = monsterPile.remove(0);
-		TileCard m2 = monsterPile.remove(0);
+		TileCard m1 = (TileCard) monsterPile.remove(0);
+		TileCard m2 = (TileCard) monsterPile.remove(0);
 		hand.add(m1);
 		hand.add(m2);
 		return hand;

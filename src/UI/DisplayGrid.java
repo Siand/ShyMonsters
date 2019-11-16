@@ -22,8 +22,9 @@ import misc.MoveBuilder;
 public class DisplayGrid extends VBox implements Observer
 {
 	public Button[][] grid = null;
-	
-	public DisplayGrid() {
+	private int reveals = 0;
+	public DisplayGrid(int reveals) {
+		this.reveals = reveals;
 		grid = new Button[Board.HEIGHT][Board.WIDTH];
 		getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
 		for(int j = 0; j < Board.HEIGHT ; j++ ) {
@@ -34,6 +35,10 @@ public class DisplayGrid extends VBox implements Observer
 				final int x = i;
 				final int y = j;
 				grid[j][i].setOnAction(e -> {
+					if(reveals > 0) {
+						Board.Instance().get(x, y).reveal();
+						return;
+					}
 					ArrayList<Card> cards = CardHandler.Instance().get();
 					if( cards.size() == 0) return;
 					if(cards.get(0) instanceof TileCard)
@@ -43,7 +48,9 @@ public class DisplayGrid extends VBox implements Observer
 							CardHandler.Instance().deselect();
 						}
 					} else {
-						BoardSelector.Instance().select(x, y);
+						if(Board.Instance().isSteppable(x,y)) {
+							BoardSelector.Instance().select(x, y);
+						}
 					}
 				});
 				rowBox.getChildren().add(grid[j][i]);
