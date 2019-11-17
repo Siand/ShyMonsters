@@ -15,13 +15,15 @@ public class MoveCard implements Card
 			artwork = "jump.png";
 		} else if(isAttack) {
 			artwork = "attack.png";
+		} else {
+			artwork = "cardback.png";
 		}
 	}
 	
 	@Override
 	public boolean isUnique()
 	{
-		return false;
+		return (!isAttack && !isJump);
 	}
 	
 	@Override
@@ -43,7 +45,7 @@ public class MoveCard implements Card
 	@Override
 	public void deplete()
 	{
-		uses--;
+		if(isAttack || isJump ) uses--;
 		if(uses == 0)  { artwork	= "cardback.png"; }
 	}
 	

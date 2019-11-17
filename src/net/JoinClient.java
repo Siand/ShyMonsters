@@ -43,6 +43,12 @@ public class JoinClient implements Client
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public boolean hasConnected()
+	{
+		return connected;
+	}
 	
 	
 	

@@ -34,7 +34,14 @@ public class Board extends Observable
 	}
 	
 	public Position getPawnPos() {
+		if(pawn == null) return null;
 		return pawn.getPos();
+	}
+	
+	public void reveal(int x ,int y) {
+		board[y][x].reveal();
+		setChanged();
+		notifyObservers();
 	}
 	
 	public boolean add(int x, int y, TileCard t) {

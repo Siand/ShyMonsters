@@ -24,6 +24,10 @@ public class JoinScreen
 		connect.getStyleClass().add("mainMenuButton");
 		connect.setOnAction(e -> {
 			ClientFactory.create(hostTF.getText());
+			if(ClientFactory.hasConnected()) {
+				connect.setText("Connected");
+				connect.setDisable(true);
+			}
 		});
 		items.getChildren().addAll(label,hostTF,connect);
 		scene = new Scene(items,MainMenu.frameWidth, MainMenu.frameHeight);

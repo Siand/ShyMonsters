@@ -1,10 +1,7 @@
 package UI;
 
-import items.CyanMonster;
-import items.Board;
-import UI.PlayScene;
-
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -16,10 +13,10 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import misc.Constants;
+import javafx.stage.WindowEvent;
+import net.ClientFactory;
 
 public class MainMenu extends Application
 {
@@ -85,6 +82,12 @@ public class MainMenu extends Application
 		//mainStage.setScene(PlayScene.Instance().getScene(Constants.DM,2));
 		mainStage.setScene(mainScene);
 		mainStage.setMaximized(true);
+		mainStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+	          public void handle(WindowEvent we) {
+	        	  if(ClientFactory.getClient() != null)
+	        		  ClientFactory.getClient().close();
+	          }
+	      });    
 		mainStage.show();
 	}
 

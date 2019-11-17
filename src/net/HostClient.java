@@ -41,6 +41,11 @@ public class HostClient implements Client
 			cr.kill();
 		}
 	}
+	@Override
+	public boolean hasConnected()
+	{
+		return hasConnection;
+	}
 
 	
 

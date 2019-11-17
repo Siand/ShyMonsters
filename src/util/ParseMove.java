@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import UI.GameObserver;
 import items.Board;
 import items.Tile;
 import items.TileCard;
@@ -29,10 +30,25 @@ public class ParseMove
 		if(data == null) return;
 		if(data.containsKey("Tiles")) {
 			setBoard();
+			GameObserver.Instance().onChange();
 		} else if(data.containsKey("Move")) {
 			updateBoard();
+		} else if(data.containsKey("Reveal")) {
+			revealAtPos();
 		}
 	}
+	
+	public void setObservingBoard() {
+			setBoard();
+	}
+	
+	private void revealAtPos() {
+		JSONObject tile = (JSONObject)data.get("Reveal");
+		int x = ((Long)tile.get("X")).intValue();
+		int y = ((Long)tile.get("Y")).intValue();
+		Board.Instance().reveal(x, y);
+	}
+	
 	
 	private void setBoard() {
 		Board.Instance().reset();
@@ -41,8 +57,8 @@ public class ParseMove
 		for(Object o : tiles) {
 			JSONObject tobj = (JSONObject)o;
 			String type = (String)tobj.get("Name");
-			int x = (Integer)tobj.get("X");
-			int y = (Integer)tobj.get("Y");
+			int x = ((Long)tobj.get("X")).intValue();
+			int y = ((Long)tobj.get("Y")).intValue();
 			Tile t = mf.create(type,x,y);
 			Board.Instance().add(x,y,new TileCard(t,false));
 		}

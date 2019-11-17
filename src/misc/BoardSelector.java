@@ -27,6 +27,11 @@ public class BoardSelector
 		}
 	}
 	
+	public boolean isSelected(int x, int y) {
+		Position newPos = new Position(x, y);
+		return positions.contains(newPos);
+	}
+	
 	public void reset() {
 		positions.clear();
 	}

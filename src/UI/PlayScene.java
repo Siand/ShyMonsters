@@ -24,6 +24,7 @@ import misc.CardHandler;
 import misc.CardPile;
 import misc.Constants;
 import misc.MoveBuilder;
+import moves.Move;
 import net.ClientFactory;
 
 public class PlayScene
@@ -64,9 +65,10 @@ public class PlayScene
 		// Hero specifics
 		else {
 			grid = new DisplayGrid(reveals);
-			ArrayList<Card> cards= new ArrayList<>();
+			ArrayList<Card> cards = new ArrayList<>();
 			cards.add(new MoveCard(true, false));
 			cards.add(new MoveCard(false, true));
+			cards.add(new MoveCard(false, false));
 			hand.supply(cards);
 			lockIn.setOnAction(e -> {
 				MoveBuilder.Instance().reset();
@@ -75,7 +77,9 @@ public class PlayScene
 				}
 				if(MoveBuilder.Instance().applyPositions(Board.Instance().getPawnPos(), BoardSelector.Instance().get())) {
 					CardHandler.Instance().depleteAll();
-					ClientFactory.getClient().send(MoveBuilder.Instance().get().toJSONString());
+					Move m = MoveBuilder.Instance().get();
+					Board.Instance().play(m);
+					ClientFactory.getClient().send(m.toJSONString());
 				}
 				
 			});
@@ -92,7 +96,7 @@ public class PlayScene
 		Image im = new Image(PlayScene.class.getResourceAsStream("rules.jpg"), size / 4, size /4, false, true);
 		ImageView rulesView = new ImageView(im);
 		Label image = new Label("", rulesView);
-		Label tilesToReveal = new Label((role == Constants.DM? 0 : reveals) +" Reveals this turn.");
+		Label tilesToReveal = new Label(reveals +" Reveals this turn.");
 		tilesToReveal.getStyleClass().add("whiteText");
 		lockIn.setAlignment(Pos.CENTER_RIGHT);
 		tilesToReveal.setAlignment(Pos.CENTER_RIGHT);

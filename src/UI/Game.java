@@ -4,9 +4,11 @@ import java.util.Observable;
 import java.util.Observer;
 
 import items.Board;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import misc.Constants;
 import net.ClientFactory;
+import util.ParseMove;
 
 public class Game
 {
@@ -35,12 +37,34 @@ public class Game
 		}
 		if(!actives[currentTurn]) {
 			if(role == Constants.DM) {
-				ClientFactory.getClient().send(Board.Instance().toJSONString());
+				String boardState = Board.Instance().toJSONString();
+				DisplayGrid dg = new DisplayGrid(0);
+				int size = (int)(MainMenu.frameHeight* 0.9);
+				dg.resize(size);
+				ParseMove pm = new ParseMove(boardState);
+				pm.setObservingBoard();
+				ClientFactory.getClient().send(boardState);
+				ObserverScreen.createInstance(dg);
+				Platform.runLater(new Runnable(){
+		               @Override public void run() {
+		            	   MainMenu.mainStage.setScene(ObserverScreen.Instance().getScene());
+		                 }
+					});
+			} else {
+				Platform.runLater(new Runnable(){
+		               @Override public void run() {
+		            	   MainMenu.mainStage.setScene(waiting.getScene());
+		                 }
+					});
 			}
-			MainMenu.mainStage.setScene(waiting.getScene());
+
 		} else {
-			MainMenu.mainStage.setScene(PlayScene.Instance().getScene(role, reveals));
-			reveals--;
+			if(role == Constants.DM) { Board.Instance().reset(); }
+			Platform.runLater(new Runnable(){
+	               @Override public void run() {
+	            	   MainMenu.mainStage.setScene(PlayScene.Instance().getScene(role, reveals--));
+	                 }
+				});
 		}
 		currentTurn++;
 	}

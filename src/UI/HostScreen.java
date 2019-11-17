@@ -33,6 +33,7 @@ public class HostScreen
 		start.setOnAction(e -> {
 			if(HostClient.hasConnection) {
 				Game game = new Game(role);
+				ClientFactory.getClient().send("Start:" + (role == Constants.DM? "Hero" : "DM"));
 			}
 		});
 		VBox items = new VBox();
