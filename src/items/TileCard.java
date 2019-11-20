@@ -23,12 +23,10 @@ public class TileCard implements Card
 		artwork = t.getArtwork();
 	}
 	public void play(int x, int y) {
-		if(!inUse && Board.Instance().add(x, y, this)) {
-			BoardSelector.Instance().select(x,y);
-			inUse = true;
+		if(Board.Instance().add(x, y, this)) {
 			this.x = x;
 			this.y = y;
-			t.spawn(x, y);	
+			t.spawn(x, y);
 		}
 	}
 	
@@ -37,11 +35,9 @@ public class TileCard implements Card
 	}
 	
 	public void remove() {
-		if(inUse) {
+		if(BoardSelector.Instance().isSelected(x, y)) {
 			uses = 1;
 			Board.Instance().remove(x, y);
-			BoardSelector.Instance().select(x,y);
-			inUse = false;
 		}
 	}
 	
@@ -59,8 +55,7 @@ public class TileCard implements Card
 	@Override
 	public void setInUse(boolean iU)
 	{
-		//DO NOT USE
-		//inUse = iU;
+		inUse = iU;
 	}
 
 	@Override
@@ -72,7 +67,13 @@ public class TileCard implements Card
 	@Override
 	public void deplete()
 	{
+		setInUse(false);
 		uses--;
+	}
+	
+	@Override
+	public void replete() {
+		uses = 1;
 	}
 
 	@Override

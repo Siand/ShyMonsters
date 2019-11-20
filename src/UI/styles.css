@@ -49,7 +49,7 @@
 	-fx-font-family: "Aclonica";
 	-fx-font-size: 25pt ;
 	-fx-text-base-color: white;
-	-fx-text-fill: -fx-text-base-color;
+	-fx-text-fill: white;
 }
 
 .gridButton {
@@ -68,7 +68,7 @@
 .whiteText {
 	-fx-font-size: 25pt ;
 	-fx-text-base-color: white;
-	-fx-text-fill: -fx-text-base-color;
+	-fx-text-fill: white ;
 }
 
 .textField {

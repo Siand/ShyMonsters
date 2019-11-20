@@ -5,7 +5,7 @@ import UI.GameObserver;
 public class Monster extends Tile
 {
 
-	private boolean isAlive;
+	private boolean isAlive = true;
 	Pattern pattern;
 	public Monster(int x, int y) {
 		pattern = new Pattern();
@@ -21,7 +21,6 @@ public class Monster extends Tile
 	{
 		this.x = x;
 		this.y = y;
-		isAlive = true;
 		hasChanged = true;
 	}
 	
@@ -39,6 +38,10 @@ public class Monster extends Tile
 	public boolean isMonster()
 	{
 		return true;
+	}
+	
+	public boolean isAlive() {
+		return isAlive;
 	}
 	
 	public void kill() {

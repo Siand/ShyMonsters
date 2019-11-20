@@ -2,7 +2,6 @@ package misc;
 
 import java.util.ArrayList;
 
-import javafx.util.Pair;
 import moves.Position;
 
 public class BoardSelector

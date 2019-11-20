@@ -21,6 +21,7 @@ public class Hand extends VBox implements Observer
 	int cardSize = 0;
 	public Hand() {
 		Board.Instance().addObserver(this);
+		getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
 	}
 	
 	public void supply(ArrayList<Card> cards) {
@@ -32,13 +33,15 @@ public class Hand extends VBox implements Observer
 			String artwork = cards.get(i).getArtwork();
 			Image image = new Image(PlayScene.class.getResourceAsStream(artwork));
 			row[i].setGraphic(new ImageView(image));
+			row[i].getStyleClass().add("gridButton");
 			final int index = i;
 			row[i].setOnAction(e -> {
-				if(!cards.get(index).getInUse()) {
-					CardHandler.Instance().add(cards.get(index));
-				}
-				else {
-					CardHandler.Instance().remove(cards.get(index));
+				System.out.println("Called select");
+				CardHandler.Instance().select(cards.get(index));
+				if(cards.get(index).getInUse()) {
+					addBorder(index);
+				} else {
+					removeBorder(index);
 				}
 			});
 		}
@@ -52,15 +55,15 @@ public class Hand extends VBox implements Observer
 		}
 	}
 	
-	public void resize(int cardSize) {
-		this.cardSize = cardSize;
-		setMaxHeight(cardSize * (row.length+1)/2);
-		setMinHeight(cardSize * (row.length+1)/2);
-		setMinWidth(cardSize * 2);
-		setMaxWidth(cardSize * 2);
+	public void resize(int cSize) {
+		this.cardSize = cSize - 4;
+		setMaxHeight(cSize * (row.length+1)/2);
+		setMinHeight(cSize * (row.length+1)/2);
+		setMinWidth(cSize * 2);
+		setMaxWidth(cSize * 2);
 		for(int i = 0; i< row.length ; i++) {
-			row[i].setMaxSize(cardSize, cardSize);
-			row[i].setMinSize(cardSize, cardSize);
+			row[i].setMaxSize(cSize, cSize);
+			row[i].setMinSize(cSize, cSize);
 			String artwork = cards.get(i).getArtwork();
 			Image image = new Image(PlayScene.class.getResourceAsStream(artwork), cardSize, cardSize, false, true);
 			row[i].setGraphic(new ImageView(image));
@@ -75,7 +78,21 @@ public class Hand extends VBox implements Observer
 			String artwork = cards.get(i).getArtwork();
 			Image image = new Image(PlayScene.class.getResourceAsStream(artwork), cardSize, cardSize, false, true);
 			row[i].setGraphic(new ImageView(image));
+			if(cards.get(i).getInUse()) {
+				addBorder(i);
+			} else {
+				removeBorder(i);
+			}
 		}	
 	}
 	
+	private void removeBorder(int pos) {
+		row[pos].getStyleClass().removeAll("gridButtonToggled");
+		row[pos].getStyleClass().add("gridButtonUntoggled");
+	}
+	
+	private void addBorder(int pos) {
+		row[pos].getStyleClass().removeAll("gridButtonUntoggled");
+		row[pos].getStyleClass().add("gridButtonToggled");
+	}
 }

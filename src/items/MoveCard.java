@@ -46,6 +46,7 @@ public class MoveCard implements Card
 	public void deplete()
 	{
 		if(isAttack || isJump ) uses--;
+		setInUse(false);
 		if(uses == 0)  { artwork	= "cardback.png"; }
 	}
 	
@@ -60,5 +61,11 @@ public class MoveCard implements Card
 	public String getArtwork()
 	{
 		return artwork;
+	}
+
+	@Override
+	public void replete()
+	{
+		uses = 1;		
 	}
 }

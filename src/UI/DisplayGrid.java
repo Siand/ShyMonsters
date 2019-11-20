@@ -15,6 +15,7 @@ import org.json.simple.JSONObject;
 import items.Board;
 import items.Card;
 import items.DefaultTile;
+import items.Monster;
 import items.Tile;
 import items.TileCard;
 import javafx.scene.image.Image;
@@ -96,20 +97,29 @@ public class DisplayGrid extends VBox implements Observer
 	
 	public void onUpdate() {
 		int size = (int)getMinHeight() / Board.HEIGHT;
+		boolean pawnPlaced = false;
 		size -=4;
 		for(int i = 0; i < Board.WIDTH ; i++ ) {
 			for(int j = 0; j < Board.HEIGHT ; j++ ) {
  				Tile tile = Board.Instance().get(i, j);
-				if(tile instanceof DefaultTile) {
-					removeBorder(i,j);
-				} else if(BoardSelector.Instance().isSelected(i, j)){
+ 				if(BoardSelector.Instance().isSelected(i, j)){
 					addBorder(i,j);
 				} else {
 					removeBorder(i,j);
 				}
 				if(!tile.hasChanged) continue;
-				String artwork = tile.getArtwork();
-				Image image = new Image(DisplayGrid.class.getResourceAsStream(artwork), size, size, false, true);
+				Image image;
+				if(tile instanceof Monster && !((Monster)tile).isAlive()) {
+					Position pawnpos = Board.Instance().getPawnPos();
+					if(pawnpos != null) {
+						pawnPlaced = true;
+					}
+					String overlapImg = pawnpos == null? "deadWithPawn.png" : "dead.png";
+					image = overlap(i,j,overlapImg,size);
+				} else {
+					String artwork = tile.getArtwork();
+					image = new Image(DisplayGrid.class.getResourceAsStream(artwork), size, size, false, true);
+				}
 				final int x = i;
 				final int y = j;
 				Platform.runLater(new Runnable(){
@@ -121,30 +131,13 @@ public class DisplayGrid extends VBox implements Observer
 			}
 		}
 		Position pawnpos = Board.Instance().getPawnPos();
-		if(pawnpos != null) {
-			final BufferedImage finalImage = new BufferedImage(size, size,
-			        BufferedImage.TYPE_INT_RGB);
-			 Graphics2D g = finalImage.createGraphics();
-			 BufferedImage foreg;
-			try
-			{
-				foreg = ImageIO.read(DisplayGrid.class.getResourceAsStream("pawn.png"));
-				String artwork = Board.Instance().get(pawnpos.x, pawnpos.y).getArtwork();
-				BufferedImage bg = ImageIO.read(DisplayGrid.class.getResourceAsStream(artwork));
-				g.drawImage(bg,0,0,size,size,0,0,bg.getWidth(),bg.getHeight(), null);
-				g.drawImage(foreg,0,0,size,size,0,0,foreg.getWidth(),foreg.getHeight(), null);
-				g.dispose();
-				Image oImg = SwingFXUtils.toFXImage(finalImage, null);
-				Platform.runLater(new Runnable(){
-		               @Override public void run() {
-		   					grid[pawnpos.y][pawnpos.x].setGraphic(new ImageView(oImg));
-		                 }
-					});
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+		if(!pawnPlaced && pawnpos != null) {
+			Image oImg = overlap(pawnpos.x, pawnpos.y, "pawn.png", size);
+			Platform.runLater(new Runnable(){
+	               @Override public void run() {
+	   					grid[pawnpos.y][pawnpos.x].setGraphic(new ImageView(oImg));
+	                 }
+				});
 		}
 	}
 	
@@ -193,6 +186,30 @@ public class DisplayGrid extends VBox implements Observer
 	    }
 
 	    return new ImageView(wr).getImage();
+	}
+	
+	private Image overlap(int xPos, int yPos, String foreground ,int size) {
+		final BufferedImage finalImage = new BufferedImage(size, size,
+		        BufferedImage.TYPE_INT_RGB);
+		 Graphics2D g = finalImage.createGraphics();
+		 BufferedImage foreg;
+		try
+		{
+			foreg = ImageIO.read(DisplayGrid.class.getResourceAsStream(foreground));
+			String artwork = Board.Instance().get(xPos, yPos).getArtwork();
+			BufferedImage bg = ImageIO.read(DisplayGrid.class.getResourceAsStream(artwork));
+			g.drawImage(bg,0,0,size,size,0,0,bg.getWidth(),bg.getHeight(), null);
+			g.drawImage(foreg,0,0,size,size,0,0,foreg.getWidth(),foreg.getHeight(), null);
+			g.dispose();
+			Image oImg = SwingFXUtils.toFXImage(finalImage, null);
+
+			return oImg;
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
 

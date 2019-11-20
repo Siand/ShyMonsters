@@ -70,6 +70,7 @@ public class Game
 	}
 	
 	public void gameOver(boolean killed) {
+		System.out.println("Game Over!");
 		if(role == Constants.DM) {
 			if(killed) {
 				// WIN

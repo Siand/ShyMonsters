@@ -7,6 +7,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import javafx.util.Pair;
+import misc.BoardSelector;
 import moves.Move;
 import moves.Position;
 
@@ -45,10 +46,12 @@ public class Board extends Observable
 	}
 	
 	public boolean add(int x, int y, TileCard t) {
+		if(!t.canUse()) return false;
 		if(board[y][x] instanceof DefaultTile) {
 			t.deplete();
 			board[y][x] = t.getTile();
 			board[y][x].hasChanged = true;
+			BoardSelector.Instance().select(x,y);
 			setChanged();
 			notifyObservers();
 			return true;
@@ -70,12 +73,15 @@ public class Board extends Observable
 		if(x < 0 || y < 0) return;
 		board[y][x] = new DefaultTile();
 		board[y][x].hasChanged = true;
+		BoardSelector.Instance().select(x,y);
 		setChanged();
 		notifyObservers();
 	}
 	
 	public void play(Move m) {
 		Position nextMove;
+		Position pawnPos = pawn.getPos();
+		board[pawnPos.y][pawnPos.x].hasChanged = true;
 		if(m.isJump) {
 			nextMove = m.through;
 			pawn.jumpOver(board[nextMove.y][nextMove.x]);
@@ -86,6 +92,7 @@ public class Board extends Observable
 		} else {
 			pawn.move(board[nextMove.y][nextMove.x]);
 		}
+		pawn.setPos(nextMove.x, nextMove.y);
 		setChanged();
 		notifyObservers();
 	}

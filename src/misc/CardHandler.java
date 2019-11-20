@@ -32,25 +32,40 @@ public class CardHandler
 			selected.get(0).setInUse(false);
 			selected.clear();
 		}
+		c.setInUse(true);
 		selected.add(c);
 	}
+	
 	public void depleteAll() {
 		for(Card c : selected) {
 			c.deplete();
 		}
 	}
+	
 	public void remove (Card c) {
+		c.setInUse(false);
 		if(c instanceof TileCard) {
 			((TileCard)c).remove();
 		}
 		selected.remove(c);
 	}
 	
+	public void select(Card c) {
+		if(!c.getInUse() && c.canUse()) {
+			add(c);
+		} else {
+			remove(c);
+		}
+	}
+	
+	
 	public void deselect() {
+		// For use after placing a tile
 		if(selected.get(0) instanceof TileCard) {
 			selected.remove(0);
 		}
 	}
+	
 	public ArrayList<Card> get() {
 		return selected;
 	}
