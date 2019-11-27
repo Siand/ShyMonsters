@@ -2,10 +2,14 @@ package UI;
 
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Optional;
 
 import items.Board;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TextInputDialog;
 import misc.Constants;
 import net.ClientFactory;
 import util.ParseMove;
@@ -70,19 +74,31 @@ public class Game
 	}
 	
 	public void gameOver(boolean killed) {
-		System.out.println("Game Over!");
+		GameObserver.Instance().running = false;
+		String string;
 		if(role == Constants.DM) {
 			if(killed) {
 				// WIN
+				string = "YOU WON!";
+				
 			} else {
-				// LOSE
+				string = "YOU LOST!";
 			}
 		} else {
-			if(killed) {
-				// win
+			if(!killed) {
+				string = "YOU WON!";
 			} else {
-				// lose
+				string = "YOU LOST!";
 			}
 		}
+		showEnd(string);
+	}
+	
+	public void showEnd(String string) {
+		Alert alert = new Alert(AlertType.NONE);
+		alert.setTitle("Game Over");
+		alert.setHeaderText(null);
+		alert.setContentText(string);
+		alert.show();
 	}
 }

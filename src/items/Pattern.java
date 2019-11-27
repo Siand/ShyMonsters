@@ -1,28 +1,28 @@
 package items;
 import java.util.ArrayList;
 
-import javafx.util.Pair;
+import moves.Position;
 
 public class Pattern
 {
 
-	private ArrayList<Pair<Integer,Integer>> empty;
-	private ArrayList<Pair<Integer,Integer>> filled;
+	private ArrayList<Position> empty;
+	private ArrayList<Position> filled;
 	public Pattern()
 	{
 		empty = new ArrayList<>();
 		filled = new ArrayList<>();
 	}
 	
-	public boolean isActive(ArrayList<Pair<Integer,Integer>> active)
+	public boolean isActive(ArrayList<Position> active)
 	{
 		if(active.size() < filled.size()) {
 			return false;
 		}
-		for(Pair<Integer,Integer> a : active) {
+		for(Position a : active) {
 			boolean exists = false;
-			for(Pair<Integer,Integer> b : filled) {
-				if(b.getKey() == a.getKey() && b.getValue() == a.getValue()) {
+			for(Position b : filled) {
+				if(b.x == a.x && b.y == a.y) {
 					exists = true;
 					break;
 				}
@@ -30,8 +30,8 @@ public class Pattern
 			if(!exists) {
 				return false;
 			}
-			for(Pair<Integer,Integer> b : empty	) {
-				if(b.getKey() == a.getKey() && b.getValue() == a.getValue()) {
+			for(Position b : empty	) {
+				if(b.x == a.x && b.y == a.y) {
 					return false;
 				}
 			}
@@ -41,11 +41,11 @@ public class Pattern
 	
 	public void addEmpty(Integer x, Integer y)
 	{
-		empty.add(new Pair<Integer,Integer>(x,y));
+		empty.add(new Position(x,y));
 	}
 	
 	public void addFilled(Integer x, Integer y)
 	{
-		filled.add(new Pair<Integer,Integer>(x,y));
+		filled.add(new Position(x,y));
 	}
 }

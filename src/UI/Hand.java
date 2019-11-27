@@ -17,6 +17,7 @@ import misc.CardHandler;
 public class Hand extends VBox implements Observer
 {
 	private ArrayList<Card> cards;
+	public static int size = 0;
 	private Button[] row;
 	int cardSize = 0;
 	public Hand() {
@@ -26,6 +27,7 @@ public class Hand extends VBox implements Observer
 	
 	public void supply(ArrayList<Card> cards) {
 		this.cards = cards;
+		size = cards.size();
 		getChildren().clear();
 		row = new Button[cards.size()];
 		for(int i=0; i < cards.size(); i++) {
@@ -36,7 +38,7 @@ public class Hand extends VBox implements Observer
 			row[i].getStyleClass().add("gridButton");
 			final int index = i;
 			row[i].setOnAction(e -> {
-				System.out.println("Called select");
+				if(!GameObserver.Instance().running) { return; }
 				CardHandler.Instance().select(cards.get(index));
 				if(cards.get(index).getInUse()) {
 					addBorder(index);

@@ -11,6 +11,7 @@ import items.Board;
 import items.Tile;
 import items.TileCard;
 import javafx.util.Pair;
+import misc.BoardSelector;
 import moves.Move;
 import moves.Position;
 
@@ -62,7 +63,8 @@ public class ParseMove
 			Tile t = mf.create(type,x,y);
 			Board.Instance().add(x,y,new TileCard(t,false));
 		}
-		
+		// Adding tiles selects them by default, so reset 
+		BoardSelector.Instance().reset();
 	}
 	
 	private void updateBoard() {

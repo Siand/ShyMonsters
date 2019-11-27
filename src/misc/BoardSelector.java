@@ -2,6 +2,7 @@ package misc;
 
 import java.util.ArrayList;
 
+import UI.Hand;
 import moves.Position;
 
 public class BoardSelector
@@ -40,7 +41,7 @@ public class BoardSelector
 	}
 	
 	public boolean isValid() {
-		return explore(positions.get(0), positions) == positions.size();
+		return explore(positions.get(0), positions) == Hand.size;
 	}
 	
 	

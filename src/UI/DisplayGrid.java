@@ -50,6 +50,7 @@ public class DisplayGrid extends VBox implements Observer
 				final int x = i;
 				final int y = j;
 				grid[j][i].setOnAction(e -> {
+					if(!GameObserver.Instance().running) { return; }
 					if(this.reveals > 0) {
 						Board.Instance().reveal(x, y);
 						JSONObject reveal = new JSONObject();
@@ -72,6 +73,12 @@ public class DisplayGrid extends VBox implements Observer
 					} else {
 						if(Board.Instance().isSteppable(x,y)) {
 							BoardSelector.Instance().select(x, y);
+							if(BoardSelector.Instance().isSelected(x, y)) {
+								addBorder(x, y);
+							} else {
+								removeBorder(x, y);
+							}
+							onUpdate();
 						}
 					}
 				});
@@ -114,7 +121,7 @@ public class DisplayGrid extends VBox implements Observer
 					if(pawnpos != null) {
 						pawnPlaced = true;
 					}
-					String overlapImg = pawnpos == null? "deadWithPawn.png" : "dead.png";
+					String overlapImg = pawnpos == null? "dead.png" : "deadWithPawn.png";
 					image = overlap(i,j,overlapImg,size);
 				} else {
 					String artwork = tile.getArtwork();

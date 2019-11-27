@@ -93,21 +93,23 @@ public class Board extends Observable
 			pawn.move(board[nextMove.y][nextMove.x]);
 		}
 		pawn.setPos(nextMove.x, nextMove.y);
+		BoardSelector.Instance().reset();
 		setChanged();
 		notifyObservers();
 	}
 	
-	public ArrayList<Pair<Integer,Integer>> getSurroundings(int x, int y) {
+	public ArrayList<Position> getSurroundings(int x, int y) {
 		int sX, sY, eX, eY;
-		ArrayList<Pair<Integer,Integer>> list = new ArrayList<>();
+		ArrayList<Position> list = new ArrayList<>();
 		sX = x > 0? x-1: 0;
 		sY = y > 0? y-1: 0;
 		eX = x < WIDTH-1? x+1: WIDTH-1;  
 		eY = y < HEIGHT-1? y+1: HEIGHT-1;
-		for(int i = sX ; i < eX; i++ )
-			for(int j = sY; j < eY; j++) {
+		for(int i = sX ; i <= eX; i++ )
+			for(int j = sY; j <= eY; j++) {
+				if(i == x && j == y) { continue; }
 				if(!(board[j][i] instanceof DefaultTile)) {
-					list.add(new Pair<Integer, Integer>(i - x, j - y));
+					list.add(new Position(i - x, j - y));
 				}
 			}
 		return list;
