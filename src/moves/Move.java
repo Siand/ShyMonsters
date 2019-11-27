@@ -31,6 +31,8 @@ public class Move
 		fromObj.put("X", from.x);
 		fromObj.put("Y", from.y);
 		object.put("From", fromObj);
-		return object.toJSONString();
+		JSONObject mobj = new JSONObject();
+		mobj.put("Move", object);
+		return mobj.toJSONString();
 	}
 }

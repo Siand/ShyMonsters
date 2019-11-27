@@ -2,6 +2,8 @@ package UI;
 
 import java.util.ArrayList;
 
+import org.json.simple.JSONObject;
+
 import items.Board;
 import items.Card;
 import items.MoveCard;
@@ -79,6 +81,7 @@ public class PlayScene
 					CardHandler.Instance().depleteAll();
 					Move m = MoveBuilder.Instance().get();
 					Board.Instance().play(m);
+					JSONObject mobj = new JSONObject();
 					ClientFactory.getClient().send(m.toJSONString());
 				}
 				

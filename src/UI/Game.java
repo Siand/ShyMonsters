@@ -99,6 +99,6 @@ public class Game
 		alert.setTitle("Game Over");
 		alert.setHeaderText(null);
 		alert.setContentText(string);
-		alert.show();
+		alert.showAndWait();
 	}
 }

@@ -72,21 +72,21 @@ public class ParseMove
 		Move m = new Move();
 		if(move.containsKey("Through")) {
 			JSONObject through =  (JSONObject)move.get("Through");
-			int x = (Integer)through.get("X");
-			int y = (Integer)through.get("Y");
+			int x = ((Long)through.get("X")).intValue();
+			int y = ((Long)through.get("Y")).intValue();
 			m.through = new Position(x, y);
 			m.isJump = true;
 		}
 		//From
 		JSONObject from =  (JSONObject)move.get("From");
-		int fromx = (Integer)from.get("X");
-		int fromy = (Integer)from.get("Y");
+		int fromx = ((Long)from.get("X")).intValue();
+		int fromy = ((Long)from.get("Y")).intValue();
 		m.from = new Position(fromx, fromx);
 		// To
 		JSONObject to =  (JSONObject)move.get("To");
-		int x = (Integer)to.get("X");
-		int y = (Integer)to.get("Y");
-		m.to = new Position(x, y);
+		int tox = ((Long)to.get("X")).intValue();
+		int toy = ((Long)to.get("Y")).intValue();
+		m.to = new Position(tox, toy);
 		if(move.containsKey("isAttack")) {
 			m.isAttack = true;
 		}
