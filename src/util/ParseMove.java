@@ -30,8 +30,9 @@ public class ParseMove
 	public void parse() {
 		if(data == null) return;
 		if(data.containsKey("Tiles")) {
-			setBoard();
 			GameObserver.Instance().onChange();
+			Board.Instance().reset();
+			setBoard();
 		} else if(data.containsKey("Move")) {
 			updateBoard();
 		} else if(data.containsKey("Reveal")) {

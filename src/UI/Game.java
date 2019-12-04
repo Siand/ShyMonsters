@@ -17,13 +17,14 @@ import util.ParseMove;
 public class Game
 {
 	Scene scene;
-	WaitingScreen waiting = WaitingScreen.Instance();
+	
 	int turns = 6;
 	boolean[] actives;
 	int currentTurn = 0;
 	int reveals = 2;
 	int role;
 	public Game(int role) {
+		TextScene.Instance().Instantiate("Waiting for your opponent...");
 		this.role = role;
 		if(role == Constants.DM) { 
 			actives = new boolean[] {true, false, true, false, true, false};
@@ -50,23 +51,30 @@ public class Game
 				ClientFactory.getClient().send(boardState);
 				ObserverScreen.createInstance(dg);
 				Platform.runLater(new Runnable(){
-		               @Override public void run() {
+		               @Override  public void run() {
 		            	   MainMenu.mainStage.setScene(ObserverScreen.Instance().getScene());
+		           		   Board.Instance().tagAll();
 		                 }
 					});
 			} else {
 				Platform.runLater(new Runnable(){
 		               @Override public void run() {
-		            	   MainMenu.mainStage.setScene(waiting.getScene());
+		            	   MainMenu.mainStage.setScene(TextScene.Instance().getScene());
+		           		   Board.Instance().tagAll();
 		                 }
 					});
 			}
 
 		} else {
-			if(role == Constants.DM) { Board.Instance().reset(); }
 			Platform.runLater(new Runnable(){
 	               @Override public void run() {
 	            	   MainMenu.mainStage.setScene(PlayScene.Instance().getScene(role, reveals--));
+	            	   if(role == Constants.DM) {
+	            		   Board.Instance().reset();
+	            	   } else {
+	            		   Board.Instance().tagAll();
+	            	   }
+	           		   
 	                 }
 				});
 		}
@@ -75,30 +83,22 @@ public class Game
 	
 	public void gameOver(boolean killed) {
 		GameObserver.Instance().running = false;
-		String string;
 		if(role == Constants.DM) {
 			if(killed) {
 				// WIN
-				string = "YOU WON!";
+				TextScene.Instance().setText("YOU WON!");
 				
 			} else {
-				string = "YOU LOST!";
+				TextScene.Instance().setText("YOU LOST!");
 			}
 		} else {
 			if(!killed) {
-				string = "YOU WON!";
+				TextScene.Instance().setText("YOU WON!");
 			} else {
-				string = "YOU LOST!";
+				TextScene.Instance().setText("YOU LOST!");
 			}
 		}
-		showEnd(string);
+		MainMenu.mainStage.setScene(TextScene.Instance().getScene());
 	}
 	
-	public void showEnd(String string) {
-		Alert alert = new Alert(AlertType.NONE);
-		alert.setTitle("Game Over");
-		alert.setHeaderText(null);
-		alert.setContentText(string);
-		alert.showAndWait();
-	}
 }

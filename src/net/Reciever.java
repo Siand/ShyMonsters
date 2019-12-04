@@ -32,6 +32,7 @@ public class Reciever implements Runnable {
 			        new InputStreamReader(clientSocket.getInputStream()));
 			while(running) {
 				String data = in.readLine();
+				if(data == null) continue;
 				if(data.contains("Start:")) {
 					data = data.substring(6);
 					Game game = new Game(data.equals("DM")? Constants.DM : Constants.HERO);

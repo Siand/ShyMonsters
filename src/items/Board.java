@@ -41,8 +41,7 @@ public class Board extends Observable
 	
 	public void reveal(int x ,int y) {
 		board[y][x].reveal();
-		setChanged();
-		notifyObservers();
+		change();
 	}
 	
 	public boolean add(int x, int y, TileCard t) {
@@ -52,8 +51,7 @@ public class Board extends Observable
 			board[y][x] = t.getTile();
 			board[y][x].hasChanged = true;
 			BoardSelector.Instance().select(x,y);
-			setChanged();
-			notifyObservers();
+			change();
 			return true;
 		}
 		return false;
@@ -65,8 +63,8 @@ public class Board extends Observable
 				board[i][j] = new DefaultTile();
 			}
 		}
-		setChanged();
-		notifyObservers();
+		pawn = null;
+		change();
 	}
 	
 	public void remove(int x, int y) {
@@ -74,8 +72,7 @@ public class Board extends Observable
 		board[y][x] = new DefaultTile();
 		board[y][x].hasChanged = true;
 		BoardSelector.Instance().select(x,y);
-		setChanged();
-		notifyObservers();
+		change();
 	}
 	
 	public void play(Move m) {
@@ -94,8 +91,7 @@ public class Board extends Observable
 		}
 		pawn.setPos(nextMove.x, nextMove.y);
 		BoardSelector.Instance().reset();
-		setChanged();
-		notifyObservers();
+		change();
 	}
 	
 	public ArrayList<Position> getSurroundings(int x, int y) {
@@ -157,5 +153,29 @@ public class Board extends Observable
 		
 		boardObj.put("Tiles", tileArr);
 		return boardObj.toJSONString();
+	}
+
+
+	public boolean isRevealed(int x, int y)
+	{
+		return board[y][x].isRevealed();
+	}
+
+
+	public void tagAll()
+	{
+		for(Tile[] row : board) {
+			for(Tile t : row) {
+				t.hasChanged = true;
+			}
+		}
+		change();
+	}
+
+
+	public void change()
+	{
+		setChanged();
+		notifyObservers();
 	}
 }

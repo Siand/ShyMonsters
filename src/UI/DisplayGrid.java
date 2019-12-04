@@ -51,7 +51,7 @@ public class DisplayGrid extends VBox implements Observer
 				final int y = j;
 				grid[j][i].setOnAction(e -> {
 					if(!GameObserver.Instance().running) { return; }
-					if(this.reveals > 0) {
+					if(this.reveals > 0 && !(Board.Instance().get(x, y) instanceof DefaultTile) && !Board.Instance().isRevealed(x,y)) {
 						Board.Instance().reveal(x, y);
 						JSONObject reveal = new JSONObject();
 						JSONObject pos = new JSONObject();
@@ -60,6 +60,9 @@ public class DisplayGrid extends VBox implements Observer
 						reveal.put("Reveal", pos);
 						ClientFactory.getClient().send(reveal.toJSONString());
 						this.reveals--;
+						return;
+					} else if (this.reveals > 0) {
+						// We've tried to reveal a revealed tile or a default tile
 						return;
 					}
 					ArrayList<Card> cards = CardHandler.Instance().get();
@@ -105,7 +108,7 @@ public class DisplayGrid extends VBox implements Observer
 	public void onUpdate() {
 		int size = (int)getMinHeight() / Board.HEIGHT;
 		boolean pawnPlaced = false;
-		size -=4;
+		size -= 4;
 		for(int i = 0; i < Board.WIDTH ; i++ ) {
 			for(int j = 0; j < Board.HEIGHT ; j++ ) {
  				Tile tile = Board.Instance().get(i, j);
