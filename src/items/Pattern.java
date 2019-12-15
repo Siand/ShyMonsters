@@ -19,10 +19,10 @@ public class Pattern
 		if(active.size() < filled.size()) {
 			return false;
 		}
-		for(Position a : active) {
+		for(Position b : filled) {
 			boolean exists = false;
-			for(Position b : filled) {
-				if(b.x == a.x && b.y == a.y) {
+			for(Position a : active) {
+				if(a.equals(b)) {
 					exists = true;
 					break;
 				}
@@ -30,8 +30,10 @@ public class Pattern
 			if(!exists) {
 				return false;
 			}
+		} 
+		for(Position a : active) {
 			for(Position b : empty	) {
-				if(b.x == a.x && b.y == a.y) {
+				if(a.equals(b)) {
 					return false;
 				}
 			}

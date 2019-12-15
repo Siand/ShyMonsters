@@ -2,10 +2,8 @@ package misc;
 
 import java.util.ArrayList;
 
-import items.Board;
 import items.Card;
 import items.TileCard;
-import moves.Move;
 
 public class CardHandler
 {
@@ -40,6 +38,7 @@ public class CardHandler
 		for(Card c : selected) {
 			c.deplete();
 		}
+		deselectAll();
 	}
 	
 	public void remove (Card c) {
@@ -61,9 +60,18 @@ public class CardHandler
 	
 	public void deselect() {
 		// For use after placing a tile
+		if(selected.isEmpty()) return;
 		if(selected.get(0) instanceof TileCard) {
 			selected.remove(0);
 		}
+	}
+	
+	public void deselectAll() {
+		selected = new ArrayList<>();
+	}
+	
+	public boolean hasCards() {
+		return !selected.isEmpty();
 	}
 	
 	public ArrayList<Card> get() {

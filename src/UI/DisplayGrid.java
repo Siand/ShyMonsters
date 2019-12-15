@@ -106,9 +106,7 @@ public class DisplayGrid extends VBox implements Observer
 	}
 	
 	public void onUpdate() {
-		int size = (int)getMinHeight() / Board.HEIGHT;
-		boolean pawnPlaced = false;
-		size -= 4;
+		int size = ((int)getMinHeight() / Board.HEIGHT) - 4;
 		for(int i = 0; i < Board.WIDTH ; i++ ) {
 			for(int j = 0; j < Board.HEIGHT ; j++ ) {
  				Tile tile = Board.Instance().get(i, j);
@@ -117,38 +115,47 @@ public class DisplayGrid extends VBox implements Observer
 				} else {
 					removeBorder(i,j);
 				}
+ 				if(tile instanceof Monster)
 				if(!tile.hasChanged) continue;
-				Image image;
-				if(tile instanceof Monster && !((Monster)tile).isAlive()) {
-					Position pawnpos = Board.Instance().getPawnPos();
-					if(pawnpos != null) {
-						pawnPlaced = true;
-					}
-					String overlapImg = pawnpos == null? "dead.png" : "deadWithPawn.png";
-					image = overlap(i,j,overlapImg,size);
-				} else {
-					String artwork = tile.getArtwork();
-					image = new Image(DisplayGrid.class.getResourceAsStream(artwork), size, size, false, true);
-				}
-				final int x = i;
-				final int y = j;
-				Platform.runLater(new Runnable(){
-		               @Override public void run() {
-		            	   grid[y][x].setGraphic(new ImageView(image));
-		                 }
-					});
-				tile.acceptChange();
+ 				Image image;
+ 				if(tile instanceof Monster && !((Monster)tile).isAlive()) {
+ 					image = overlap(tile.getX(),tile.getY(),"dead.png",size);
+ 				} else {
+ 					String artwork = tile.getArtwork();
+ 					image = new Image(DisplayGrid.class.getResourceAsStream(artwork), size, size, false, true);
+ 				}
+ 				final Image im = image;
+ 				final int x = i;
+ 				final int y = j;
+ 				Platform.runLater(new Runnable(){
+ 		            @Override public void run() {
+ 		         	   grid[y][x].setGraphic(new ImageView(im));
+ 		              }
+				});
+ 				tile.acceptChange();
 			}
 		}
+		placePawn(size);
+	}
+	
+	public void placePawn(int size) {
+		Image image;
+		boolean pawnPlaced = false;
 		Position pawnpos = Board.Instance().getPawnPos();
-		if(!pawnPlaced && pawnpos != null) {
-			Image oImg = overlap(pawnpos.x, pawnpos.y, "pawn.png", size);
-			Platform.runLater(new Runnable(){
-	               @Override public void run() {
-	   					grid[pawnpos.y][pawnpos.x].setGraphic(new ImageView(oImg));
-	                 }
-				});
+		if(pawnpos == null) { return; }
+		Tile tile = Board.Instance().get(pawnpos.x, pawnpos.y);
+		if(tile instanceof Monster && !((Monster)tile).isAlive()) {
+			image = overlap(tile.getX(),tile.getY(),"deadWithPawn.png",size);
+		} else {
+			image = overlap(pawnpos.x, pawnpos.y, "pawn.png", size);
 		}
+		final Image im = image;
+		Platform.runLater(new Runnable(){
+            @Override public void run() {
+         	   grid[pawnpos.y][pawnpos.x].setGraphic(new ImageView(im));
+              }
+			});
+		tile.acceptChange();
 	}
 	
 	public void resetView() {

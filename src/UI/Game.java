@@ -98,7 +98,10 @@ public class Game
 				TextScene.Instance().setText("YOU LOST!");
 			}
 		}
-		MainMenu.mainStage.setScene(TextScene.Instance().getScene());
+		Platform.runLater(new Runnable(){
+            @Override public void run() {
+            	MainMenu.mainStage.setScene(TextScene.Instance().getScene());
+            }});
 	}
 	
 }

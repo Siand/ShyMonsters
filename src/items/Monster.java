@@ -32,6 +32,7 @@ public class Monster extends Tile
 		if(isAlive && pattern.isActive(Board.Instance().getSurroundings(x,y)) && !Board.Instance().isShy(x,y)) {
 			GameObserver.Instance().gameOver(true);
 		}
+		hasChanged = true;
 	}
 
 	@Override

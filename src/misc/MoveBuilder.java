@@ -8,7 +8,7 @@ import moves.Position;
 
 public class MoveBuilder
 {
-	private static Move move;
+	private Move move;
 	private static MoveBuilder instance;
 	private MoveBuilder() {
 		reset();

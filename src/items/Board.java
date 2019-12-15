@@ -89,7 +89,6 @@ public class Board extends Observable
 		} else {
 			pawn.move(board[nextMove.y][nextMove.x]);
 		}
-		pawn.setPos(nextMove.x, nextMove.y);
 		BoardSelector.Instance().reset();
 		change();
 	}

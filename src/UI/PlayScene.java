@@ -73,6 +73,7 @@ public class PlayScene
 			cards.add(new MoveCard(false, false));
 			hand.supply(cards);
 			lockIn.setOnAction(e -> {
+				if(!CardHandler.Instance().hasCards()) { return; }
 				MoveBuilder.Instance().reset();
 				for(Card c : CardHandler.Instance().get()) {
 					MoveBuilder.Instance().apply((MoveCard) c);
@@ -80,9 +81,8 @@ public class PlayScene
 				if(MoveBuilder.Instance().applyPositions(Board.Instance().getPawnPos(), BoardSelector.Instance().get())) {
 					CardHandler.Instance().depleteAll();
 					Move m = MoveBuilder.Instance().get();
-					Board.Instance().play(m);
-					JSONObject mobj = new JSONObject();
 					ClientFactory.getClient().send(m.toJSONString());
+					Board.Instance().play(m);
 				}
 				
 			});
